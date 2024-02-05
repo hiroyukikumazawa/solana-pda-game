@@ -17,7 +17,6 @@ pub mod game {
         user_stats.bump = ctx.bumps.user_stats;
         Ok(())
     }
-    // handler function (add this next to the create_user_stats function in the game module)
     pub fn change_user_name(ctx: Context<ChangeUserName>, new_name: String) -> Result<()> {
         if new_name.as_bytes().len() > 200 {
             // proper error handling omitted for brevity
