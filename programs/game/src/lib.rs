@@ -17,6 +17,14 @@ pub mod game {
         user_stats.bump = ctx.bumps.user_stats;
         Ok(())
     }
+    pub fn change_user_name(ctx: Context<ChangeUserName>, new_name: String) -> Result<()> {
+        if new_name.as_bytes().len() > 200 {
+            // proper error handling omitted for brevity
+            panic!();
+        }
+        ctx.accounts.user_stats.name = new_name;
+        Ok(())
+    }
 }
 
 #[account]
@@ -39,4 +47,12 @@ pub struct CreateUserStats<'info> {
     )]
     pub user_stats: Account<'info, UserStats>,
     pub system_program: Program<'info, System>,
+}
+
+// validation struct
+#[derive(Accounts)]
+pub struct ChangeUserName<'info> {
+    pub user: Signer<'info>,
+    #[account(mut, seeds = [b"user-stats", user.key().as_ref()], bump = user_stats.bump)]
+    pub user_stats: Account<'info, UserStats>,
 }
